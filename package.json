@@ -45,6 +45,8 @@
 		"vite": "^8.0.7"
 	},
 	"dependencies": {
+		"bullmq": "^5.73.5",
+		"ioredis": "^5.10.1",
 		"lucide-svelte": "^1.0.1",
 		"socket.io": "^4.8.3",
 		"socket.io-client": "^4.8.3"

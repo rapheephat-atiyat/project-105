@@ -4,11 +4,20 @@ import { sveltekitCookies } from 'better-auth/svelte-kit';
 import { env } from '$env/dynamic/private';
 import { getRequestEvent } from '$app/server';
 import { db } from '$lib/server/db';
+import * as schema from './db/schema';
 
 export const auth = betterAuth({
-	baseURL: env.ORIGIN,
+	baseURL: env.ORIGIN || 'http://localhost:5173',
 	secret: env.BETTER_AUTH_SECRET,
-	database: drizzleAdapter(db, { provider: 'pg' }),
+	database: drizzleAdapter(db, {
+		provider: 'pg',
+		schema: {
+			user: schema.users,
+			session: schema.sessions,
+			account: schema.accounts,
+			verification: schema.verifications
+		}
+	}),
 	emailAndPassword: { enabled: true },
 	socialProviders: {
 		github: {
@@ -17,6 +26,6 @@ export const auth = betterAuth({
 		}
 	},
 	plugins: [
-		sveltekitCookies(getRequestEvent) // make sure this is the last plugin in the array
+		sveltekitCookies(getRequestEvent)
 	]
 });

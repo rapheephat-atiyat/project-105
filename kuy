@@ -1,0 +1,137 @@
+1. Core Backend Setup
+
+Database (PostgreSQL + Drizzle ORM)
+[/] สร้าง schema users
+[/] สร้าง schema sessions
+[/] สร้าง schema accounts
+[/] สร้าง schema players
+[/] สร้าง schema gameRooms
+[/] สร้าง schema roomParticipants
+[/] สร้าง schema matchSteps
+[/] ตั้งค่า Drizzle migration system
+[/] ทดสอบ connection PostgreSQL
+
+Authentication (Better Auth)
+[/] ติดตั้ง Better Auth
+[/] ตั้งค่า provider (GitHub / OAuth)
+[/] สร้าง session management
+[/] เชื่อม users ↔ sessions ↔ accounts
+[/] ป้องกัน API route ด้วย auth middleware
+[/] ทดสอบ login/logout flow
+
+Queue System (BullMQ + Redis)
+[/] ติดตั้ง Redis server
+[/] ตั้งค่า BullMQ connection
+[/] สร้าง queue roomQueue
+[/] สร้าง worker roomWorker
+[/] implement job: create room
+[/] generate joinCode
+[/] generate puzzle
+[/] save gameRooms ลง DB
+[/] ส่งผลกลับ Socket event
+[/] handle retry / failure cases
+[/] จำกัด rate การสร้างห้อง
+
+---
+
+2. Real-time System (Socket.IO)
+
+Setup Socket Server
+[/] ติดตั้ง Socket.IO backend
+[/] connect socket กับ auth session
+[/] map socket.id ↔ playerId
+
+Phase 1: Queue & Lobby
+[/] implement join-create-queue
+[/] emit queue-status
+[/] worker process queue
+[/] emit queue-finished (joinCode)
+[/] implement join-room-direct
+[/] emit join-success
+[/] emit join-error
+
+Phase 2: Pre-game Room
+[/] implement join-game
+[/] join socket room room:[code]
+[/] broadcast update-participants
+[/] track player status
+[/] implement player-ready
+[/] check all ready condition
+[/] trigger game start
+
+Phase 3: Gameplay
+[/] emit game-start
+[/] lock room state = playing
+[/] implement submit-step
+[/] validate step server-side
+[/] save matchSteps
+[/] sync state real-time
+[/] detect winner
+[/] emit player-finished
+[/] block duplicate win
+
+---
+
+3. REST API (SvelteKit)
+
+Players
+[/] POST /api/players
+[/] create guest/user player
+[/] return playerId
+
+Leaderboard
+[/] GET /api/leaderboard
+[/] query top 50 rankScore
+[/] sort DESC
+[/] optimize DB index
+
+Auth
+[/] POST /api/auth/*
+[/] integrate Better Auth handler
+[/] test session flow
+
+---
+
+4. Game Logic Layer
+
+[ ] generate puzzle (server-only)
+[ ] validate move correctness
+[ ] prevent client cheating
+[ ] handle disconnect/reconnect
+[ ] restore state from DB
+[ ] timeout AFK system
+[ ] anti double-submit protection
+
+---
+
+5. Performance & Scale
+
+[ ] Redis cache room state
+[ ] index DB (roomCode, playerId)
+[ ] rate limit socket events
+[ ] separate worker process
+[ ] stateless socket server design
+[ ] logging system
+
+---
+
+6. Testing
+
+[ ] 100+ users queue simulation
+[ ] test race condition room creation
+[ ] test ready sync
+[ ] test win condition sync
+[ ] test reconnect mid-game
+[ ] test Redis restart recovery
+
+---
+
+7. Final Polish
+
+[ ] admin debug dashboard
+[ ] loading UI queue
+[ ] error UX handling
+[ ] match history system
+[ ] spectator mode (optional)
+
+---
