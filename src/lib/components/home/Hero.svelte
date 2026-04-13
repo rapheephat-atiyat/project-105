@@ -4,11 +4,11 @@
 </script>
 
 <section class="flex flex-col items-center text-center pt-24 pb-24 min-h-[calc(100vh-4.5rem)] gap-20 max-w-[1400px] mx-auto px-4">
-	<div class="w-full max-w-[800px] flex flex-col items-center relative z-[2]">
-		<div class="inline-flex items-center px-3 py-1 border border-accent-blue text-accent-cyan bg-blue-700/10 text-[0.7rem] font-bold tracking-[0.1em] rounded shadow-[0_0_10px_var(--color-accent-cyan-glow)] mb-8 uppercase">SYSTEM READY</div>
+	<div class="w-full max-w-[800px] flex flex-col items-center relative z-2">
+		<div class="inline-flex items-center px-3 py-1 border border-accent-blue text-accent-cyan bg-blue-700/10 text-[0.7rem] font-bold tracking-widest rounded shadow-[0_0_10px_var(--color-accent-cyan-glow)] mb-8 uppercase">SYSTEM READY</div>
 		
 		<h1 class="text-[clamp(2.5rem,8vw,3.5rem)] md:text-[clamp(3.5rem,6vw,5.5rem)] leading-[1.1] mb-6 tracking-tight uppercase font-bold text-white">
-			<span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan to-accent-blue">SORTING</span> MATCH
+			<span class="text-transparent bg-clip-text bg-linear-to-r from-accent-cyan to-accent-blue">SORTING</span> MATCH
 		</h1>
 		
 		<p class="text-[#cbd5e1] text-xl leading-relaxed mb-10 max-w-[600px]">
@@ -17,7 +17,7 @@
 		</p>
 
 		<div class="flex flex-col sm:flex-row w-full sm:w-auto gap-4 justify-center">
-			<a href="/lobby" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-[#040816] bg-accent-cyan hover:bg-[#00d0e0] transition-colors shadow-[0_0_20px_var(--color-accent-cyan-glow)] w-full sm:w-auto uppercase">
+			<a href="/lobby" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-bg-core bg-accent-cyan hover:bg-[#00d0e0] transition-colors shadow-[0_0_20px_var(--color-accent-cyan-glow)] w-full sm:w-auto uppercase">
 				START MATCH
 				<Play size={16} />
 			</a>
@@ -29,9 +29,8 @@
 	</div>
 
 	<div class="animate-float w-full max-w-[800px] relative before:absolute before:-top-[10%] before:-left-[10%] before:w-[120%] before:h-[120%] before:bg-[radial-gradient(circle_at_center,var(--color-accent-cyan-glow)_0%,transparent_60%)] before:opacity-40 before:z-0 before:pointer-events-none">
-		<div class="w-full rounded-2xl bg-[rgba(8,14,30,0.8)] border border-[rgba(45,65,110,0.5)] shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,240,255,0.05)] flex flex-col overflow-hidden relative z-10">
-			<!-- Window Header -->
-			<div class="flex items-center px-6 py-4 bg-black/30 border-b border-[rgba(45,65,110,0.5)] relative">
+		<div class="w-full rounded-2xl bg-[rgba(8,14,30,0.8)] border border-border-color shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,240,255,0.05)] flex flex-col overflow-hidden relative z-10">
+			<div class="flex items-center px-6 py-4 bg-black/30 border-b border-border-color relative">
 				<div class="flex gap-2 flex-1">
 					<span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
 					<span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
@@ -41,40 +40,36 @@
                 <div class="flex-1"></div>
 			</div>
 
-			<!-- Window Body -->
 			<div class="h-[200px] md:h-[300px] relative px-8 md:px-16 py-8 md:py-12 flex items-end">
-				<!-- Grid Lines -->
-				<div class="absolute inset-x-0 inset-y-0 z-[1] flex flex-col justify-between py-12 pointer-events-none">
+				<div class="absolute inset-x-0 inset-y-0 z-1 flex flex-col justify-between py-12 pointer-events-none">
 					<div class="h-px w-full bg-white/5"></div>
 					<div class="h-px w-full bg-white/5"></div>
 					<div class="h-px w-full bg-white/5"></div>
 					<div class="h-px w-full bg-white/5"></div>
 				</div>
 
-				<div class="w-full h-full flex flex-row items-end justify-center gap-2 md:gap-4 relative z-[2]">
+				<div class="w-full h-full flex flex-row items-end justify-center gap-2 md:gap-4 relative z-2">
 					{#each bars as height, i}
 						<div class="flex-1 max-w-[60px] h-full flex flex-col justify-end items-center bg-white/5 rounded-[6px] overflow-hidden">
 							<div
-								class="sort-bar w-full bg-gradient-to-b from-[#00F0FF] to-[#1C4ED8] rounded-t-[6px] relative origin-bottom"
+								class="sort-bar w-full bg-linear-to-b from-accent-cyan to-accent-blue rounded-t-[6px] relative origin-bottom"
 								style="height: {height}%; animation-delay: {Math.abs(4 - i) * 0.15}s;"
 							>
-								<!-- Glow overlay -->
-								<div class="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent h-[40%]"></div>
+								<div class="absolute inset-0 bg-linear-to-b from-white/40 to-transparent h-[40%]"></div>
 							</div>
 						</div>
 					{/each}
 				</div>
 			</div>
 
-			<!-- Window Footer -->
-			<div class="px-8 py-5 bg-black/40 border-t border-[rgba(45,65,110,0.5)] flex justify-between items-center">
+			<div class="px-8 py-5 bg-black/40 border-t border-border-color flex justify-between items-center">
 				<div class="flex items-center gap-3">
 					<span class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_8px_var(--color-accent-cyan)] animate-pulse"></span>
 					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">CALIBRATING DATA</span>
 				</div>
 				<div class="flex items-center gap-4">
 					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">60 FPS</span>
-					<span class="w-px h-3 bg-[rgba(45,65,110,0.5)]"></span>
+					<span class="w-px h-3 bg-border-color"></span>
 					<span class="text-[0.75rem] font-bold text-accent-cyan tracking-widest">V-SYNC ON</span>
 				</div>
 			</div>
