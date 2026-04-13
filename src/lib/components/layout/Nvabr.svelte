@@ -1,6 +1,7 @@
 <script>
+	import { PUBLIC_APP_NAME } from '$env/static/public';
 </script>
 
-<div class="sticky ">
-
-</div>
+<nav class="sticky">
+	{PUBLIC_APP_NAME}
+</nav>
