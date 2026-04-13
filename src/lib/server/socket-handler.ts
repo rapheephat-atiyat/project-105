@@ -5,8 +5,32 @@ import { and, eq } from 'drizzle-orm';
 
 export function setupSockets(io: Server) {
     io.on("connection", (socket: Socket) => {
-        socket.on('join-game', (roomCode: string) => {
-            socket.join(roomCode)
+        socket.on('join-game', async (roomCode: string) => {
+            socket.join(roomCode);
+
+            const room = await db.query.gameRooms.findFirst({
+                where: eq(gameRooms.joinCode, roomCode)
+            });
+
+            if (room) {
+                const participants = await db.query.roomParticipants.findMany({
+                    where: eq(roomParticipants.roomId, room.id)
+                });
+                io.to(roomCode).emit('update-participants', participants);
+            }
+        });
+
+        socket.on('sync-participants', async (roomCode: string) => {
+            const room = await db.query.gameRooms.findFirst({
+                where: eq(gameRooms.joinCode, roomCode)
+            });
+
+            if (room) {
+                const participants = await db.query.roomParticipants.findMany({
+                    where: eq(roomParticipants.roomId, room.id)
+                });
+                io.to(roomCode).emit('update-participants', participants);
+            }
         });
 
         socket.on("player-ready", async ({ roomId, playerId }: { roomId: string, playerId: string }) => {

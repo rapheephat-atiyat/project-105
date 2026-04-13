@@ -28,3 +28,26 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         currentUser: locals.user
     };
 };
+
+export const actions = {
+    leaveRoom: async ({ params, locals }) => {
+        if (!locals.user) throw redirect(302, '/login');
+
+        const room = await db.query.gameRooms.findFirst({
+            where: eq(gameRooms.joinCode, params.code)
+        });
+
+        if (!room) throw error(404, 'Room not found');
+
+        const { and } = await import('drizzle-orm');
+
+        await db.delete(roomParticipants).where(
+            and(
+                eq(roomParticipants.roomId, room.id),
+                eq(roomParticipants.playerId, locals.user.id)
+            )
+        );
+
+        throw redirect(303, '/lobby');
+    }
+};

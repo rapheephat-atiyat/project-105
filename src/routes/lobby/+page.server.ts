@@ -61,6 +61,14 @@ export const actions: Actions = {
         });
 
         if (!existing) {
+            const currentParticipants = await db.query.roomParticipants.findMany({
+                where: eq(roomParticipants.roomId, room.id)
+            });
+
+            if (currentParticipants.length >= 10) {
+                return fail(400, { message: 'Room is full (max 10 players)' });
+            }
+
             await db.insert(roomParticipants).values({
                 roomId: room.id,
                 playerId: locals.user.id
