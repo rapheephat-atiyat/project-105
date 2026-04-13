@@ -1,113 +1,108 @@
 <script lang="ts">
-	import { Play, Code2 } from 'lucide-svelte';
+	import { Play, Code2, Activity, Cpu, ArrowRight } from 'lucide-svelte';
 	const bars = [30, 45, 65, 90, 100, 90, 65, 45, 30];
+
+	const matrix = [
+		{ name: 'Bubble Sort', best: 'O(n)', avg: 'Θ(n²)', worst: 'O(n²)', space: 'O(1)' },
+		{ name: 'Quick Sort', best: 'O(n log n)', avg: 'Θ(n log n)', worst: 'O(n²)', space: 'O(log n)' },
+		{ name: 'Merge Sort', best: 'O(n log n)', avg: 'Θ(n log n)', worst: 'O(n log n)', space: 'O(n)' }
+	];
 </script>
 
-<section class="flex flex-col items-center text-center pt-24 pb-24 min-h-[calc(100vh-4.5rem)] gap-20 max-w-[1400px] mx-auto px-4">
-	<div class="w-full max-w-[800px] flex flex-col items-center relative z-2">
-		<div class="inline-flex items-center px-3 py-1 border border-accent-blue text-accent-cyan bg-blue-700/10 text-[0.7rem] font-bold tracking-widest rounded shadow-[0_0_10px_var(--color-accent-cyan-glow)] mb-8 uppercase">SYSTEM READY</div>
+<section class="relative flex flex-col items-center overflow-hidden bg-[#000000] pt-24 pb-32">
+	
+	<div class="absolute inset-0 z-0">
+		<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_85%)]"></div>
+		<div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
+		<div class="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+	</div>
+
+	<div class="relative z-10 flex w-full max-w-[800px] flex-col items-center px-4 text-center">
+		<div class="mb-8 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 backdrop-blur-md">
+			<span class="mr-2 h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500"></span>
+			System Ready
+		</div>
 		
-		<h1 class="text-[clamp(2.5rem,8vw,3.5rem)] md:text-[clamp(3.5rem,6vw,5.5rem)] leading-[1.1] mb-6 tracking-tight uppercase font-bold text-white">
-			<span class="text-transparent bg-clip-text bg-linear-to-r from-accent-cyan to-accent-blue">SORTING</span> MATCH
+		<h1 class="mb-6 text-[clamp(2.5rem,8vw,3.5rem)] font-black uppercase leading-[1.1] tracking-tighter text-white md:text-[clamp(3.5rem,6vw,5.5rem)]">
+			<span class="bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">Sorting</span> Match
 		</h1>
 		
-		<p class="text-[#cbd5e1] text-xl leading-relaxed mb-10 max-w-[600px]">
+		<p class="mb-10 max-w-[600px] text-lg font-medium leading-relaxed text-zinc-400 md:text-xl">
 			Master the Sequence. Solve the Experiment.<br />
-			A high-performance algorithm simulation for competitive developers.
+			<span class="text-white/60">A high-performance algorithm simulation for competitive developers.</span>
 		</p>
 
-		<div class="flex flex-col sm:flex-row w-full sm:w-auto gap-4 justify-center">
-			<a href="/lobby" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-bg-core bg-accent-cyan hover:bg-[#00d0e0] transition-colors shadow-[0_0_20px_var(--color-accent-cyan-glow)] w-full sm:w-auto uppercase">
+		<div class="flex w-full flex-col justify-center gap-4 sm:w-auto sm:flex-row">
+			<a href="/lobby" class="flex items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 text-sm font-bold uppercase tracking-widest text-black shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all hover:bg-zinc-200 active:scale-95">
 				START MATCH
-				<Play size={16} />
+				<Play size={16} fill="currentColor" />
 			</a>
-			<a href="/docs" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-[#cbd5e1] bg-transparent border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors w-full sm:w-auto uppercase">
+			<a href="/docs" class="flex items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 active:scale-95">
 				<Code2 size={16} />
 				INITIALIZE
 			</a>
 		</div>
 	</div>
 
-	<div class="animate-float w-full max-w-[800px] relative before:absolute before:-top-[10%] before:-left-[10%] before:w-[120%] before:h-[120%] before:bg-[radial-gradient(circle_at_center,var(--color-accent-cyan-glow)_0%,transparent_60%)] before:opacity-40 before:z-0 before:pointer-events-none">
-		<div class="w-full rounded-2xl bg-[rgba(8,14,30,0.8)] border border-border-color shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,240,255,0.05)] flex flex-col overflow-hidden relative z-10">
-			<div class="flex items-center px-6 py-4 bg-black/30 border-b border-border-color relative">
-				<div class="flex gap-2 flex-1">
-					<span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
-					<span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
-					<span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+	<div class="animate-float relative z-10 mt-20 w-full max-w-[850px] px-4">
+		<div class="absolute -inset-1 rounded-[2.1rem] bg-blue-500/10 blur-2xl"></div>
+		<div class="relative flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/50 shadow-2xl backdrop-blur-2xl">
+			<div class="relative flex items-center border-b border-white/5 bg-white/[0.02] px-8 py-5">
+				<div class="flex flex-1 gap-2.5">
+					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
 				</div>
-				<div class="font-mono text-[#cbd5e1] text-[0.85rem] tracking-wider text-center flex-1">visualizer.exe</div>
-                <div class="flex-1"></div>
+				<div class="flex flex-1 items-center justify-center gap-2 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+					<Cpu size={12} /> visualizer.exe
+				</div>
+				<div class="flex-1 text-right text-[10px] font-bold tracking-widest text-zinc-600">TRACE_ID: VALMG</div>
 			</div>
 
-			<div class="h-[200px] md:h-[300px] relative px-8 md:px-16 py-8 md:py-12 flex items-end">
-				<div class="absolute inset-x-0 inset-y-0 z-1 flex flex-col justify-between py-12 pointer-events-none">
-					<div class="h-px w-full bg-white/5"></div>
+			<div class="relative flex h-[200px] items-end px-10 py-8 md:h-[300px] md:px-20 md:py-12">
+				<div class="pointer-events-none absolute inset-x-0 inset-y-0 z-0 flex flex-col justify-between py-12 opacity-50">
 					<div class="h-px w-full bg-white/5"></div>
 					<div class="h-px w-full bg-white/5"></div>
 					<div class="h-px w-full bg-white/5"></div>
 				</div>
-
-				<div class="w-full h-full flex flex-row items-end justify-center gap-2 md:gap-4 relative z-2">
+				<div class="relative z-10 flex h-full w-full flex-row items-end justify-center gap-2 md:gap-4">
 					{#each bars as height, i}
-						<div class="flex-1 max-w-[60px] h-full flex flex-col justify-end items-center bg-white/5 rounded-[6px] overflow-hidden">
-							<div
-								class="sort-bar w-full bg-linear-to-b from-accent-cyan to-accent-blue rounded-t-[6px] relative origin-bottom"
-								style="height: {height}%; animation-delay: {Math.abs(4 - i) * 0.15}s;"
-							>
-								<div class="absolute inset-0 bg-linear-to-b from-white/40 to-transparent h-[40%]"></div>
+						<div class="flex h-full flex-1 flex-col items-center justify-end overflow-hidden rounded-t-lg bg-white/[0.03] max-w-[50px]">
+							<div class="sort-bar relative w-full origin-bottom rounded-t-lg bg-gradient-to-t from-blue-600 via-blue-400 to-white" style="height: {height}%; animation-delay: {Math.abs(4 - i) * 0.15}s;">
+								<div class="absolute inset-0 blur-[2px] bg-white/20"></div>
 							</div>
 						</div>
 					{/each}
 				</div>
 			</div>
 
-			<div class="px-8 py-5 bg-black/40 border-t border-border-color flex justify-between items-center">
-				<div class="flex items-center gap-3">
-					<span class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_8px_var(--color-accent-cyan)] animate-pulse"></span>
-					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">CALIBRATING DATA</span>
-				</div>
+			<div class="flex items-center justify-between border-t border-white/5 bg-white/[0.02] px-8 py-5">
 				<div class="flex items-center gap-4">
-					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">60 FPS</span>
-					<span class="w-px h-3 bg-border-color"></span>
-					<span class="text-[0.75rem] font-bold text-accent-cyan tracking-widest">V-SYNC ON</span>
+					<div class="flex items-center gap-2">
+						<Activity size={14} class="text-blue-500" />
+						<span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Status: Online</span>
+					</div>
+				</div>
+				<div class="flex items-center gap-6">
+					<span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">60 FPS</span>
+					<span class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500">V-Sync On</span>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
 </section>
 
 <style>
-	.animate-float {
-		animation: float 6s ease-in-out infinite;
-	}
-
+	.animate-float { animation: float 8s ease-in-out infinite; }
 	@keyframes float {
-		0% { transform: translateY(0px); }
-		50% { transform: translateY(-10px); }
-		100% { transform: translateY(0px); }
+		0%, 100% { transform: translateY(0px) rotateX(0deg); }
+		50% { transform: translateY(-15px) rotateX(2deg); }
 	}
-
-	.sort-bar {
-		animation: sort-bounce 3s ease-in-out infinite alternate;
-	}
-
+	.sort-bar { animation: sort-bounce 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate; }
 	@keyframes sort-bounce {
-		0%,
-		20% {
-			transform: scaleY(1);
-		}
-		40% {
-			transform: scaleY(0.4);
-			background: #FFFFFF;
-		}
-		60% {
-			transform: scaleY(1.2);
-			background: #00F0FF;
-		}
-		80%,
-		100% {
-			transform: scaleY(1);
-		}
+		0%, 100% { transform: scaleY(1); filter: brightness(1); }
+		50% { transform: scaleY(0.6); filter: brightness(1.3); }
 	}
 </style>
