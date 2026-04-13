@@ -1,157 +1,118 @@
 <script lang="ts">
-    import { Play, FileText } from 'lucide-svelte';
+	import { Play, Code2 } from 'lucide-svelte';
+	const bars = [30, 45, 65, 90, 100, 90, 65, 45, 30];
 </script>
 
-<section class="hero-section layout-container">
-    <div class="hero-content">
-        <div class="badge">SYSTEM READY</div>
-        <h1 class="hero-title">
-            SORTING<br />
-            <span class="text-gradient">MATCH</span>
-        </h1>
-        <p class="hero-subtitle">
-            Master the Algorithm. Solve the Experiment.<br />
-            A high-performance simulation for<br /> competitive sorters.
-        </p>
-        
-        <div class="hero-actions">
-            <a href="/lobby" class="btn-primary">
-                GET STARTED
-                <Play size={16} />
-            </a>
-            <a href="/docs" class="btn-outline">
-                View Documentation
-            </a>
-        </div>
-    </div>
-    
-    <div class="hero-visual animate-float">
-        <div class="module-card glass-panel">
-            <div class="module-visual">
-                <div class="pulse-ring"></div>
-                <div class="core"></div>
-            </div>
-            <div class="module-info">
-                <span class="label">ACTIVE MODULE</span>
-                <h4>Quicksort Optimized</h4>
-            </div>
-        </div>
-    </div>
+<section class="flex flex-col items-center text-center pt-24 pb-24 min-h-[calc(100vh-4.5rem)] gap-20 max-w-[1400px] mx-auto px-4">
+	<div class="w-full max-w-[800px] flex flex-col items-center relative z-[2]">
+		<div class="inline-flex items-center px-3 py-1 border border-accent-blue text-accent-cyan bg-blue-700/10 text-[0.7rem] font-bold tracking-[0.1em] rounded shadow-[0_0_10px_var(--color-accent-cyan-glow)] mb-8 uppercase">SYSTEM READY</div>
+		
+		<h1 class="text-[clamp(2.5rem,8vw,3.5rem)] md:text-[clamp(3.5rem,6vw,5.5rem)] leading-[1.1] mb-6 tracking-tight uppercase font-bold text-white">
+			<span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-cyan to-accent-blue">SORTING</span> MATCH
+		</h1>
+		
+		<p class="text-[#cbd5e1] text-xl leading-relaxed mb-10 max-w-[600px]">
+			Master the Sequence. Solve the Experiment.<br />
+			A high-performance algorithm simulation for competitive developers.
+		</p>
+
+		<div class="flex flex-col sm:flex-row w-full sm:w-auto gap-4 justify-center">
+			<a href="/lobby" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-[#040816] bg-accent-cyan hover:bg-[#00d0e0] transition-colors shadow-[0_0_20px_var(--color-accent-cyan-glow)] w-full sm:w-auto uppercase">
+				START MATCH
+				<Play size={16} />
+			</a>
+			<a href="/docs" class="flex items-center justify-center gap-2 px-8 py-4 rounded text-base font-bold tracking-widest text-[#cbd5e1] bg-transparent border border-white/20 hover:border-white/40 hover:bg-white/5 transition-colors w-full sm:w-auto uppercase">
+				<Code2 size={16} />
+				INITIALIZE
+			</a>
+		</div>
+	</div>
+
+	<div class="animate-float w-full max-w-[800px] relative before:absolute before:-top-[10%] before:-left-[10%] before:w-[120%] before:h-[120%] before:bg-[radial-gradient(circle_at_center,var(--color-accent-cyan-glow)_0%,transparent_60%)] before:opacity-40 before:z-0 before:pointer-events-none">
+		<div class="w-full rounded-2xl bg-[rgba(8,14,30,0.8)] border border-[rgba(45,65,110,0.5)] shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,240,255,0.05)] flex flex-col overflow-hidden relative z-10">
+			<!-- Window Header -->
+			<div class="flex items-center px-6 py-4 bg-black/30 border-b border-[rgba(45,65,110,0.5)] relative">
+				<div class="flex gap-2 flex-1">
+					<span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+					<span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+					<span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+				</div>
+				<div class="font-mono text-[#cbd5e1] text-[0.85rem] tracking-wider text-center flex-1">visualizer.exe</div>
+                <div class="flex-1"></div>
+			</div>
+
+			<!-- Window Body -->
+			<div class="h-[200px] md:h-[300px] relative px-8 md:px-16 py-8 md:py-12 flex items-end">
+				<!-- Grid Lines -->
+				<div class="absolute inset-x-0 inset-y-0 z-[1] flex flex-col justify-between py-12 pointer-events-none">
+					<div class="h-px w-full bg-white/5"></div>
+					<div class="h-px w-full bg-white/5"></div>
+					<div class="h-px w-full bg-white/5"></div>
+					<div class="h-px w-full bg-white/5"></div>
+				</div>
+
+				<div class="w-full h-full flex flex-row items-end justify-center gap-2 md:gap-4 relative z-[2]">
+					{#each bars as height, i}
+						<div class="flex-1 max-w-[60px] h-full flex flex-col justify-end items-center bg-white/5 rounded-[6px] overflow-hidden">
+							<div
+								class="sort-bar w-full bg-gradient-to-b from-[#00F0FF] to-[#1C4ED8] rounded-t-[6px] relative origin-bottom"
+								style="height: {height}%; animation-delay: {Math.abs(4 - i) * 0.15}s;"
+							>
+								<!-- Glow overlay -->
+								<div class="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent h-[40%]"></div>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Window Footer -->
+			<div class="px-8 py-5 bg-black/40 border-t border-[rgba(45,65,110,0.5)] flex justify-between items-center">
+				<div class="flex items-center gap-3">
+					<span class="w-2 h-2 rounded-full bg-accent-cyan shadow-[0_0_8px_var(--color-accent-cyan)] animate-pulse"></span>
+					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">CALIBRATING DATA</span>
+				</div>
+				<div class="flex items-center gap-4">
+					<span class="text-[0.75rem] font-bold text-[#cbd5e1] tracking-widest">60 FPS</span>
+					<span class="w-px h-3 bg-[rgba(45,65,110,0.5)]"></span>
+					<span class="text-[0.75rem] font-bold text-accent-cyan tracking-widest">V-SYNC ON</span>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <style>
-    .hero-section {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 4rem;
-        padding-bottom: 4rem;
-        min-height: calc(100vh - 4.5rem - 400px);
-    }
-    
-    .hero-content {
-        flex: 1;
-        max-width: 600px;
-    }
-    
-    .badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border: 1px solid var(--accent-blue);
-        color: var(--accent-cyan);
-        background: rgba(28, 78, 216, 0.1);
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        border-radius: 4px;
-        margin-bottom: 1.5rem;
-    }
-    
-    .hero-title {
-        font-size: 4.5rem;
-        line-height: 1.1;
-        margin: 0 0 1.5rem 0;
-        letter-spacing: -0.02em;
-        text-transform: uppercase;
-    }
-    
-    .hero-subtitle {
-        color: var(--text-secondary);
-        font-size: 1.125rem;
-        line-height: 1.6;
-        margin-bottom: 2.5rem;
-    }
-    
-    .hero-actions {
-        display: flex;
-        gap: 1rem;
-    }
-    
-    .hero-visual {
-        flex: 1;
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    .module-card {
-        width: 100%;
-        max-width: 450px;
-        padding: 0;
-        overflow: hidden;
-        border-radius: 16px;
-    }
-    
-    .module-visual {
-        height: 250px;
-        background: radial-gradient(circle at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%), url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjE1KSIvPjwvc3ZnPg==');
-        background-color: #070D21;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-    
-    .pulse-ring {
-        position: absolute;
-        width: 120px;
-        height: 120px;
-        border: 1px solid var(--accent-cyan);
-        border-radius: 50%;
-        animation: pulse 3s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
-        opacity: 0;
-    }
-    
-    .core {
-        width: 60px;
-        height: 60px;
-        border: 2px solid var(--accent-cyan);
-        background: var(--accent-cyan-glow);
-        box-shadow: 0 0 20px var(--accent-cyan);
-        transform: rotate(45deg);
-    }
-    
-    .module-info {
-        padding: 1.5rem;
-        background: linear-gradient(to bottom, transparent, rgba(0, 10, 40, 0.8));
-    }
-    
-    .label {
-        font-size: 0.65rem;
-        font-weight: 700;
-        color: var(--text-secondary);
-        letter-spacing: 0.1em;
-        display: block;
-        margin-bottom: 0.25rem;
-    }
-    
-    .module-info h4 {
-        margin: 0;
-        font-size: 1.25rem;
-        color: #fff;
-    }
-    
-    @keyframes pulse {
-        0% { transform: scale(0.5); opacity: 0.8; }
-        100% { transform: scale(3); opacity: 0; }
-    }
+	.animate-float {
+		animation: float 6s ease-in-out infinite;
+	}
+
+	@keyframes float {
+		0% { transform: translateY(0px); }
+		50% { transform: translateY(-10px); }
+		100% { transform: translateY(0px); }
+	}
+
+	.sort-bar {
+		animation: sort-bounce 3s ease-in-out infinite alternate;
+	}
+
+	@keyframes sort-bounce {
+		0%,
+		20% {
+			transform: scaleY(1);
+		}
+		40% {
+			transform: scaleY(0.4);
+			background: #FFFFFF;
+		}
+		60% {
+			transform: scaleY(1.2);
+			background: #00F0FF;
+		}
+		80%,
+		100% {
+			transform: scaleY(1);
+		}
+	}
 </style>

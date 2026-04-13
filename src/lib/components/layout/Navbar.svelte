@@ -5,147 +5,67 @@
 	let user = $derived($page.data.user);
 </script>
 
-<nav class="navbar glass-panel">
-	<div class="layout-container nav-container">
-		<div class="nav-left">
-			<a href="/" class="brand text-gradient">{PUBLIC_APP_NAME || 'Sorting Match'}</a>
+<nav class="sticky top-0 z-50 backdrop-blur-2xl bg-[rgba(4,8,22,0.85)] border-b border-border-color">
+	<div class="max-w-[1400px] mx-auto px-4 md:px-8 w-full flex justify-between items-center h-18">
+		<div class="shrink-0">
+			<a href="/" class="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-linear-to-r from-accent-cyan to-accent-blue">{PUBLIC_APP_NAME || 'Sorting Match'}</a>
 		</div>
 
-		<div class="nav-center">
-			<a href="/" class="nav-link active">Home</a>
-			<a href="/education" class="nav-link">Education</a>
-			<a href="/competition" class="nav-link">Competition</a>
-			<a href="/practice" class="nav-link">Practice</a>
+		<div class="flex gap-8">
+			<a href="/" class="text-white/60 hover:text-accent-cyan font-medium text-[0.95rem] transition-colors py-2 relative {$page.url.pathname === '/' ? 'text-accent-cyan after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-cyan after:shadow-[0_-2px_10px_var(--color-accent-cyan-glow)]' : ''}">Home</a>
+			<a
+				href="/education"
+				class="text-white/60 hover:text-accent-cyan font-medium text-[0.95rem] transition-colors py-2 relative {$page.url.pathname.startsWith(
+					'/education'
+				)
+					? 'text-accent-cyan after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-cyan after:shadow-[0_-2px_10px_var(--color-accent-cyan-glow)]'
+					: ''}">Education</a
+			>
+			<a
+				href="/competition"
+				class="text-white/60 hover:text-accent-cyan font-medium text-[0.95rem] transition-colors py-2 relative {$page.url.pathname.startsWith(
+					'/competition'
+				)
+					? 'text-accent-cyan after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-cyan after:shadow-[0_-2px_10px_var(--color-accent-cyan-glow)]'
+					: ''}">Competition</a
+			>
+			<a
+				href="/practice"
+				class="text-white/60 hover:text-accent-cyan font-medium text-[0.95rem] transition-colors py-2 relative {$page.url.pathname.startsWith(
+					'/practice'
+				)
+					? 'text-accent-cyan after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-cyan after:shadow-[0_-2px_10px_var(--color-accent-cyan-glow)]'
+					: ''}">Practice</a
+			>
 		</div>
 
-		<div class="nav-right">
+		<div class="flex items-center justify-end min-w-[150px]">
 			{#if user}
-				<div class="profile-widget">
-					<div class="avatar">
-                        <img src={user.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id || user.guestName}`} alt="Profile" />
+				<div
+					class="flex items-center gap-3 p-1 pr-3 border border-border-color rounded-full bg-white/5 cursor-pointer hover:border-white/20 hover:bg-white/10 transition-all"
+				>
+					<div class="w-9 h-9 rounded-full overflow-hidden bg-bg-core border-2 border-border-color">
+						<img
+							src={user.image ||
+								`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id || user.guestName}`}
+							alt="Profile"
+							class="w-full h-full object-cover"
+						/>
 					</div>
-					<div class="user-info">
-						<span class="user-name">{user.guestName || user.email || 'Player'}</span>
-						<span class="rank-score">Score: {user.rankScore || 0}</span>
+					<div class="flex flex-col leading-tight">
+						<span class="text-[0.85rem] font-semibold text-white"
+							>{user.guestName || user.email || 'Player'}</span
+						>
+						<span class="text-[0.7rem] text-white/60">Score: {user.rankScore || 0}</span>
 					</div>
 				</div>
 			{:else}
-				<a href="/login" class="btn-outline">Login / Guest</a>
+				<a
+					href="/login"
+					class="px-6 py-2 rounded-full font-bold text-[0.85rem] tracking-wider border border-border-color bg-transparent text-white/80 hover:bg-white/5 transition-colors uppercase whitespace-nowrap"
+					>Login / Guest</a
+				>
 			{/if}
 		</div>
 	</div>
 </nav>
-
-<style>
-	.navbar {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		border-radius: 0;
-		border-left: none;
-		border-right: none;
-		border-top: none;
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        background: rgba(4, 8, 22, 0.85);
-        border-bottom: 1px solid var(--border-color);
-	}
-
-	.nav-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		height: 4.5rem;
-	}
-
-	.brand {
-		font-size: 1.25rem;
-		font-weight: 700;
-		letter-spacing: 0.05em;
-	}
-
-	.nav-center {
-		display: flex;
-		gap: 2rem;
-	}
-
-	.nav-link {
-		color: var(--text-secondary);
-		font-weight: 500;
-		font-size: 0.95rem;
-		transition: color var(--transition-smooth);
-		padding: 0.5rem 0;
-		position: relative;
-	}
-
-	.nav-link:hover, .nav-link.active {
-		color: var(--accent-cyan);
-	}
-
-	.nav-link.active::after {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: 2px;
-		background: var(--accent-cyan);
-		box-shadow: 0 -2px 10px var(--accent-cyan-glow);
-	}
-
-	.nav-right {
-		display: flex;
-		align-items: center;
-		min-width: 150px;
-		justify-content: flex-end;
-	}
-
-	.profile-widget {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.25rem 0.75rem 0.25rem 0.25rem;
-		border: 1px solid var(--border-color);
-		border-radius: 2rem;
-		background: rgba(255, 255, 255, 0.03);
-		cursor: pointer;
-		transition: all var(--transition-smooth);
-	}
-
-	.profile-widget:hover {
-		border-color: rgba(255, 255, 255, 0.2);
-		background: rgba(255, 255, 255, 0.05);
-	}
-
-	.avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		overflow: hidden;
-		background: var(--bg-core);
-		border: 2px solid var(--border-color);
-	}
-
-	.avatar img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.user-info {
-		display: flex;
-		flex-direction: column;
-		line-height: 1.2;
-	}
-
-	.user-name {
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: var(--text-primary);
-	}
-
-	.rank-score {
-		font-size: 0.7rem;
-		color: var(--text-secondary);
-	}
-</style>
