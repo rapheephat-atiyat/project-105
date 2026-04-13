@@ -1,163 +1,189 @@
-import {
-	pgTable,
-	text,
-	integer,
-	timestamp,
-	uniqueIndex,
-	index,
-	pgEnum,
-	primaryKey,
-	boolean,
-	json
-} from 'drizzle-orm/pg-core';
-
+import { pgTable, pgEnum, index, uniqueIndex, primaryKey } from "drizzle-orm/pg-core";
 
 export const gameRoomStatusEnum = pgEnum("game_room_status", [
 	"waiting",
 	"playing",
-	"ended"
+	"ended",
 ]);
 
 export const gameRoomModeEnum = pgEnum("game_room_mode", [
 	"Easy",
 	"Normal",
 	"Hard",
-	"Skibidi Toilet"
+	"Skibidi Toilet",
 ]);
 
-export const users = pgTable('users', (t) => ({
+export const userRoleEnum = pgEnum("user_role", [
+	"User",
+	"Admin",
+]);
+
+export const playerTypeEnum = pgEnum("player_type", [
+	"user",
+	"guest",
+]);
+
+export const users = pgTable("users", (t) => ({
 	id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+
 	email: t.text().unique(),
 	image: t.text(),
+
 	rankScore: t.integer().notNull().default(0),
+	role: userRoleEnum("role").notNull().default("User"),
+
 	createdAt: t.timestamp().notNull().defaultNow(),
 	updatedAt: t.timestamp().notNull().defaultNow(),
 }));
 
 
-export const sessions = pgTable("sessions", (t) => ({
-	id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+export const sessions = pgTable("sessions",
+	(t) => ({
+		id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
-	token: t.text().notNull().unique(),
+		token: t.text().notNull().unique(),
 
-	ipAddress: t.text(),
-	userAgent: t.text(),
+		userId: t.text().references(() => users.id, { onDelete: "cascade" }),
 
-	userId: t.text()
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		ipAddress: t.text(),
+		userAgent: t.text(),
 
-	expiresAt: t.timestamp().notNull(),
+		expiresAt: t.timestamp().notNull(),
 
-	createdAt: t.timestamp().notNull().defaultNow(),
-	updatedAt: t.timestamp().notNull().defaultNow(),
-}), (table) => [
-	index("sessions_user_idx").on(table.userId)
-]);
+		createdAt: t.timestamp().notNull().defaultNow(),
+		updatedAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [index("sessions_user_idx").on(table.userId)]
+);
 
-export const accounts = pgTable("accounts", (t) => ({
-	id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+export const accounts = pgTable("accounts",
+	(t) => ({
+		id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
-	userId: t.text()
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		userId: t.text().references(() => users.id, { onDelete: "cascade" }),
 
-	providerId: t.text().notNull(),
-	accountId: t.text().notNull(),
+		providerId: t.text().notNull(),
+		accountId: t.text().notNull(),
 
-	password: t.text(),
+		password: t.text(),
 
-	accessToken: t.text(),
-	refreshToken: t.text(),
-	idToken: t.text(),
+		accessToken: t.text(),
+		refreshToken: t.text(),
 
-	accessTokenExpiresAt: t.timestamp(),
-	refreshTokenExpiresAt: t.timestamp(),
+		createdAt: t.timestamp().notNull().defaultNow(),
+		updatedAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [
+		uniqueIndex("provider_account_unique").on(
+			table.providerId,
+			table.accountId
+		),
+		index("accounts_user_idx").on(table.userId),
+	]
+);
 
-	scope: t.text(),
+export const players = pgTable("players",
+	(t) => ({
+		id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
-	createdAt: t.timestamp().notNull().defaultNow(),
-	updatedAt: t.timestamp().notNull().defaultNow(),
-}), (table) => [
-	uniqueIndex("provider_account_unique")
-		.on(table.providerId, table.accountId),
+		type: playerTypeEnum("type").notNull(),
 
-	index("accounts_user_idx").on(table.userId)
-]);
+		userId: t.text().references(() => users.id, { onDelete: "cascade" }),
 
-export const gameRooms = pgTable("game_rooms", (t) => ({
-	id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+		guestName: t.text(),
 
-	joinCode: t.text().notNull().unique(),
+		avatar: t.text(),
 
-	status: gameRoomStatusEnum("status")
-		.notNull()
-		.default("waiting"),
+		createdAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [
+		index("players_user_idx").on(table.userId),
+	]
+);
 
-	mode: gameRoomModeEnum("mode")
-		.notNull()
-		.default("Normal"),
+export const gameRooms = pgTable(
+	"game_rooms",
+	(t) => ({
+		id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
-	algorithm: t.text().notNull(),
+		joinCode: t.text().notNull().unique(),
 
-	initialArray: t.json().notNull(),
+		status: gameRoomStatusEnum("status").notNull().default("waiting"),
 
-	hostId: t.text()
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		mode: gameRoomModeEnum("mode").notNull().default("Normal"),
 
-	createdAt: t.timestamp().notNull().defaultNow(),
-	updatedAt: t.timestamp().notNull().defaultNow(),
-}), (table) => [
-	index("rooms_host_idx").on(table.hostId)
-]);
+		algorithm: t.text().notNull(),
 
-export const roomParticipants = pgTable("room_participants", (t) => ({
-	roomId: t.text()
-		.notNull()
-		.references(() => gameRooms.id, { onDelete: "cascade" }),
+		initialArray: t.json().notNull(),
 
-	userId: t.text()
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		hostPlayerId: t.text()
+			.notNull()
+			.references(() => players.id, { onDelete: "cascade" }),
 
-	isReady: t.boolean().notNull().default(false),
+		createdAt: t.timestamp().notNull().defaultNow(),
+		updatedAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [index("rooms_host_idx").on(table.hostPlayerId)]
+);
 
-	score: t.integer(),
-	rank: t.integer(),
+export const roomParticipants = pgTable(
+	"room_participants",
+	(t) => ({
+		roomId: t.text()
+			.notNull()
+			.references(() => gameRooms.id, { onDelete: "cascade" }),
 
-	finishedAt: t.timestamp(),
+		playerId: t.text()
+			.notNull()
+			.references(() => players.id, { onDelete: "cascade" }),
 
-	joinedAt: t.timestamp().notNull().defaultNow(),
-}), (table) => [
-	primaryKey({ columns: [table.roomId, table.userId] }),
+		isReady: t.boolean().notNull().default(false),
 
-	index("participants_room_idx").on(table.roomId),
-	index("participants_user_idx").on(table.userId)
-]);
+		score: t.integer().default(0),
 
-export const matchSteps = pgTable("match_steps", (t) => ({
-	id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
+		rank: t.integer(),
 
-	roomId: t.text()
-		.notNull()
-		.references(() => gameRooms.id, { onDelete: "cascade" }),
+		finishedAt: t.timestamp(),
 
-	userId: t.text()
-		.notNull()
-		.references(() => users.id, { onDelete: "cascade" }),
+		joinedAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [
+		primaryKey({ columns: [table.roomId, table.playerId] }),
 
-	stepNumber: t.integer().notNull(),
+		index("participants_room_idx").on(table.roomId),
+		index("participants_player_idx").on(table.playerId),
+	]
+);
 
-	currentArray: t.json().notNull(),
+export const matchSteps = pgTable(
+	"match_steps",
+	(t) => ({
+		id: t.text().primaryKey().$defaultFn(() => crypto.randomUUID()),
 
-	isCorrect: t.boolean().notNull(),
+		roomId: t.text()
+			.notNull()
+			.references(() => gameRooms.id, { onDelete: "cascade" }),
 
-	createdAt: t.timestamp().notNull().defaultNow(),
-}), (table) => [
-	uniqueIndex("step_unique")
-		.on(table.roomId, table.userId, table.stepNumber),
+		playerId: t.text()
+			.notNull()
+			.references(() => players.id, { onDelete: "cascade" }),
 
-	index("steps_room_idx").on(table.roomId),
-	index("steps_user_idx").on(table.userId)
-]);
+		stepNumber: t.integer().notNull(),
+
+		currentArray: t.json().notNull(),
+
+		isCorrect: t.boolean().notNull(),
+
+		createdAt: t.timestamp().notNull().defaultNow(),
+	}),
+	(table) => [
+		uniqueIndex("step_unique").on(
+			table.roomId,
+			table.playerId,
+			table.stepNumber
+		),
+
+		index("steps_room_idx").on(table.roomId),
+		index("steps_player_idx").on(table.playerId),
+	]
+);
