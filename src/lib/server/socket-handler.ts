@@ -21,7 +21,11 @@ export function setupSockets(io: Server) {
     });
 
     io.on("connection", (socket: Socket) => {
-        socket.on('join-game', async (roomCode: string) => {
+        socket.on('join-game', async ({ roomCode, playerId }: { roomCode: string, playerId: string }) => {
+            // Track physical mapping
+            socket.data.roomCode = roomCode;
+            socket.data.playerId = playerId;
+
             socket.join(roomCode);
             await broadcastParticipants(io, roomCode);
         });
@@ -42,12 +46,13 @@ export function setupSockets(io: Server) {
                 where: eq(roomParticipants.roomId, roomId)
             });
 
-            if (participants.length > 0 && participants.every(p => p.isReady)) {
+            // Minimum 2 players to start a game organically
+            if (participants.length >= 2 && participants.every(p => p.isReady)) {
                 await db.update(gameRooms).set({ status: 'playing' }).where(eq(gameRooms.id, roomId));
                 io.to(room.joinCode).emit('game-start');
             }
 
-            io.to(room.joinCode).emit('update-participants', participants);
+            await broadcastParticipants(io, room.joinCode);
         });
 
         socket.on('submit-step', async ({ roomId, playerId, stepData }: {
@@ -81,6 +86,32 @@ export function setupSockets(io: Server) {
                 io.to(room.joinCode).emit('player-finished', { playerId });
             }
         });
+
+        socket.on('disconnect', async () => {
+            const { roomCode, playerId } = socket.data;
+            if (roomCode && playerId) {
+                const room = await db.query.gameRooms.findFirst({
+                    where: eq(gameRooms.joinCode, roomCode)
+                });
+
+                if (room) {
+                    await db.delete(roomParticipants).where(and(
+                        eq(roomParticipants.roomId, room.id),
+                        eq(roomParticipants.playerId, playerId)
+                    ));
+
+                    const remaining = await db.query.roomParticipants.findMany({
+                        where: eq(roomParticipants.roomId, room.id)
+                    });
+
+                    if (remaining.length === 0) {
+                        await db.delete(gameRooms).where(eq(gameRooms.id, room.id));
+                    } else {
+                        await broadcastParticipants(io, roomCode);
+                    }
+                }
+            }
+        });
     });
 }
 
@@ -90,10 +121,17 @@ async function broadcastParticipants(io: Server, roomCode: string) {
     });
 
     if (room) {
-        const participants = await db.query.roomParticipants.findMany({
-            where: eq(roomParticipants.roomId, room.id)
-        });
-        io.to(roomCode).emit('update-participants', participants);
+        const participantsData = await db.select({
+            playerId: roomParticipants.playerId,
+            isReady: roomParticipants.isReady,
+            guestName: players.guestName,
+            avatar: players.avatar
+        })
+            .from(roomParticipants)
+            .innerJoin(players, eq(roomParticipants.playerId, players.id))
+            .where(eq(roomParticipants.roomId, room.id));
+
+        io.to(roomCode).emit('update-participants', participantsData);
     }
 }
 

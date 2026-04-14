@@ -8,6 +8,15 @@
     let rooms = $state(data.initialRooms || []);
     let socket: Socket;
 
+    let showModal = $state(false);
+    let selectedAlgorithm = $state('Quick Sort');
+    let selectedDifficulty = $state('Normal');
+    let selectedMaxPlayers = $state(4);
+    let selectedPrivacy = $state(false);
+
+    const algorithms = ['Quick Sort', 'Merge Sort', 'Bubble Sort', 'Insertion Sort'];
+    const difficulties = ['Easy', 'Normal', 'Hard'];
+
     onMount(() => {
         socket = io();
 
@@ -36,7 +45,12 @@
         try {
             const res = await fetch('/api/rooms', {
                 method: 'POST',
-                body: JSON.stringify({ mode: 'Normal', algorithm: 'Quick Sort' }),
+                body: JSON.stringify({ 
+                    mode: selectedDifficulty, 
+                    algorithm: selectedAlgorithm,
+                    maxPlayers: selectedMaxPlayers,
+                    isPrivate: selectedPrivacy
+                }),
                 headers: { 'Content-Type': 'application/json' }
             });
             const d = await res.json();
@@ -97,7 +111,7 @@
 				</button>
                 
                 <!-- Create Arena -->
-				<button onclick={createArena} class="group relative flex flex-col items-start gap-4 overflow-hidden rounded-[2rem] border border-indigo-500/20 bg-indigo-950/20 p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/40 hover:bg-indigo-900/30 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] opacity-90 hover:opacity-100">
+				<button onclick={() => showModal = true} class="group relative flex flex-col items-start gap-4 overflow-hidden rounded-[2rem] border border-indigo-500/20 bg-indigo-950/20 p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/40 hover:bg-indigo-900/30 hover:shadow-[0_0_40px_rgba(99,102,241,0.15)] opacity-90 hover:opacity-100">
                     <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-600/20 blur-3xl transition-all duration-300 group-hover:bg-indigo-500/40"></div>
 					<div class="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 transition-transform duration-300 group-hover:rotate-90">
 						<Plus size={24} />
@@ -207,6 +221,66 @@
 		</div>
 	</div>
 </div>
+
+<!-- Arena Configuration Modal -->
+{#if showModal}
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity" onclick={() => showModal = false}>
+        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+        <div class="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/80 p-8 shadow-2xl backdrop-blur-2xl transition-transform" onclick={(e) => e.stopPropagation()}>
+            <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-indigo-600/20 blur-3xl"></div>
+            
+            <h2 class="relative z-10 text-2xl font-black uppercase tracking-widest text-white mb-6">Initialize Arena</h2>
+            
+            <div class="relative z-10 space-y-6">
+                <!-- Dropdown Algorithm -->
+                <div>
+                    <label class="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">Sorting Protocol</label>
+                    <select bind:value={selectedAlgorithm} class="w-full appearance-none rounded-xl border border-white/5 bg-black/50 px-4 py-3 text-sm font-semibold text-white outline-none transition-colors focus:border-indigo-500/50">
+                        {#each algorithms as algo}
+                            <option value={algo}>{algo}</option>
+                        {/each}
+                    </select>
+                </div>
+
+                <!-- Dropdown Difficulty -->
+                <div>
+                    <label class="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">Complexity</label>
+                    <select bind:value={selectedDifficulty} class="w-full appearance-none rounded-xl border border-white/5 bg-black/50 px-4 py-3 text-sm font-semibold text-white outline-none transition-colors focus:border-indigo-500/50">
+                        {#each difficulties as diff}
+                            <option value={diff}>{diff} {diff === 'Hard' ? '(12 Nodes)' : diff === 'Normal' ? '(6 Nodes)' : '(3 Nodes)'}</option>
+                        {/each}
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Max Players -->
+                    <div>
+                        <label class="block text-xs font-bold tracking-widest text-zinc-400 uppercase mb-2">Max Players</label>
+                        <input type="number" bind:value={selectedMaxPlayers} min="2" max="32" class="w-full appearance-none rounded-xl border border-white/5 bg-black/50 px-4 py-3 text-sm font-semibold text-white outline-none transition-colors focus:border-indigo-500/50" />
+                    </div>
+
+                    <!-- Private Match -->
+                    <div class="flex flex-col justify-end pb-3">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" bind:checked={selectedPrivacy} class="peer sr-only">
+                            <div class="h-6 w-11 rounded-full bg-zinc-800 border border-white/5 peer-checked:bg-indigo-500 peer-checked:border-indigo-400 transition-all after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all peer-checked:after:translate-x-5 relative shadow-inner"></div>
+                            <span class="text-xs font-bold tracking-widest text-zinc-400 uppercase peer-checked:text-indigo-400 transition-colors">Private</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-10 mt-10 grid grid-cols-2 gap-4">
+                <button onclick={() => showModal = false} class="rounded-xl border border-white/5 bg-transparent px-4 py-3 text-xs font-bold tracking-widest text-zinc-400 uppercase transition-colors hover:bg-white/5 hover:text-white">
+                    Abort
+                </button>
+                <button onclick={createArena} class="rounded-xl bg-indigo-600 px-4 py-3 text-xs font-bold tracking-widest text-white uppercase shadow-[0_0_20px_rgba(79,70,229,0.3)] transition-all hover:bg-indigo-500 hover:shadow-[0_0_30px_rgba(79,70,229,0.6)]">
+                    Deploy
+                </button>
+            </div>
+        </div>
+    </div>
+{/if}
 
 <style>
 	@keyframes ping-bounce {

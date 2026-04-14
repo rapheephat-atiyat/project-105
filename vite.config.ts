@@ -5,6 +5,6 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	server: {
-		allowedHosts: ['transcription-dinner-may-ignored.trycloudflare.com']
+		allowedHosts: ['hiring-seo-vernon-ranging.trycloudflare.com']
 	}
 });

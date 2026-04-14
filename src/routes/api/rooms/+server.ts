@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { gameRooms, players } from '$lib/server/db/schema';
 import { auth } from '$lib/server/auth';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
@@ -21,10 +21,13 @@ export const GET: RequestHandler = async () => {
                 avatar: players.avatar
             }
         })
-        .from(gameRooms)
-        .leftJoin(players, eq(gameRooms.hostPlayerId, players.id))
-        .where(eq(gameRooms.status, 'waiting'))
-        .orderBy(desc(gameRooms.createdAt));
+            .from(gameRooms)
+            .leftJoin(players, eq(gameRooms.hostPlayerId, players.id))
+            .where(and(
+                eq(gameRooms.status, 'waiting'),
+                eq(gameRooms.isPrivate, false)
+            ))
+            .orderBy(desc(gameRooms.createdAt));
 
         return json({ success: true, rooms: roomsResult });
     } catch (err) {
@@ -33,37 +36,48 @@ export const GET: RequestHandler = async () => {
     }
 };
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, cookies }) => {
     try {
         const body = await request.json();
-        
-        // Ensure we have a valid player ID. If none provided, create a guest player.
+
         let hostPlayerId = body.playerId;
         const session = await auth.api.getSession({ headers: request.headers });
 
         if (!hostPlayerId) {
-            // Check if there is a player associated with the logged in user
-            if (session?.user?.id) {
+            const guestCookie = cookies.get('sorter_guest_id');
+            if (guestCookie) {
+                const existingGuest = await db.query.players.findFirst({
+                    where: eq(players.id, guestCookie)
+                });
+                if (existingGuest) hostPlayerId = existingGuest.id;
+            }
+
+            if (!hostPlayerId && session?.user?.id) {
                 const existingPlayer = await db.query.players.findFirst({
                     where: eq(players.userId, session.user.id)
                 });
                 hostPlayerId = existingPlayer?.id;
             }
 
-            // Create anonymous player if none found
             if (!hostPlayerId) {
                 const [newPlayer] = await db.insert(players).values({
                     type: session?.user ? 'user' : 'guest',
-                    guestName: 'Anonymous_User',
+                    guestName: session?.user?.name || `GUEST_${Math.floor(1000 + Math.random() * 9000)}`,
                     userId: session?.user?.id || null
                 }).returning();
                 hostPlayerId = newPlayer.id;
+
+                cookies.set('sorter_guest_id', newPlayer.id, {
+                    path: '/',
+                    maxAge: 60 * 60 * 24 * 7,
+                    httpOnly: true,
+                    secure: false 
+                });
             }
         }
 
         const joinCode = `RM-${Math.floor(100 + Math.random() * 900)}`;
 
-        // Generate mock array for sorting
         const size = body.mode === 'Hard' ? 12 : 6;
         const initialArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100));
 
@@ -72,6 +86,8 @@ export const POST: RequestHandler = async ({ request }) => {
             status: 'waiting',
             mode: body.mode || 'Normal',
             algorithm: body.algorithm || 'Quick Sort',
+            maxPlayers: body.maxPlayers || 4,
+            isPrivate: body.isPrivate || false,
             initialArray,
             hostPlayerId
         }).returning();

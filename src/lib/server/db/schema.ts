@@ -70,6 +70,8 @@ export const gameRooms = pgTable("game_rooms", {
 	mode: gameRoomModeEnum("mode").notNull().default("Normal"),
 	algorithm: text("algorithm").notNull(),
 	initialArray: json("initial_array").notNull(),
+	maxPlayers: integer("max_players").notNull().default(4),
+	isPrivate: boolean("is_private").notNull().default(false),
 	hostPlayerId: text("host_player_id").notNull().references(() => players.id, { onDelete: "cascade" }),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
