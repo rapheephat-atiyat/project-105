@@ -1,78 +1,112 @@
 <script lang="ts">
 	import { BookOpen, Trophy, FlaskConical, Play, ArrowRight } from 'lucide-svelte';
+	import GlassWindow from '$lib/components/ui/GlassWindow.svelte';
 </script>
 
-<section class="py-16 md:py-24 flex flex-col items-center max-w-[1400px] w-full mx-auto px-4 md:px-8">
-	<div class="text-center mb-16 flex flex-col items-center">
-		<h2 class="text-3xl md:text-4xl tracking-[0.2em] font-bold text-white uppercase m-0">
-			CORE <span class="text-transparent bg-clip-text bg-linear-to-r from-accent-cyan to-accent-blue">SYSTEMS</span>
+<section class="relative z-10 flex w-full max-w-[1200px] flex-col items-center px-4 py-24 mx-auto">
+	<div class="mb-16 flex flex-col items-center text-center">
+		<h2 class="mb-6 text-[clamp(2.5rem,6vw,3.5rem)] font-black uppercase leading-[1.1] tracking-tighter text-white">
+			Core <span class="bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent">Systems</span>
 		</h2>
-		<div class="w-[60px] h-[2px] bg-accent-cyan mt-6 shadow-[0_0_10px_var(--color-accent-cyan-glow)]"></div>
+		<p class="max-w-[600px] text-lg font-medium leading-relaxed text-zinc-400">
+			Choose your path. Train, compete, or analyze.
+		</p>
 	</div>
 
-	<div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-		<div class="p-10 flex flex-col items-center text-center rounded-2xl bg-linear-to-b from-[rgba(16,28,65,0.4)] to-[rgba(10,18,45,0.6)] border border-[rgba(45,65,110,0.4)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:border-white/20">
-			<div class="w-14 h-14 rounded-xl flex justify-center items-center mb-6 bg-accent-cyan/10 border border-accent-cyan/20">
-				<BookOpen size={24} color="#00F0FF" />
+	<div class="grid w-full grid-cols-1 gap-8 md:grid-cols-3 items-stretch">
+		<GlassWindow 
+			windowName="edu.module" 
+			modId="MOD_01" 
+			dotClasses="bg-blue-500/20 group-hover:bg-blue-500/50"
+		>
+			<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-blue-500/10 border border-blue-500/20">
+				<BookOpen size={24} class="text-blue-400" />
 			</div>
-			<h3 class="text-xl mb-4 tracking-widest font-bold text-white">EDUCATION</h3>
-			<p class="text-[#cbd5e1] text-[0.9rem] leading-relaxed mb-8 flex-1">Explore the Algorithm Catalog. Learn Big O and logic through interactive visualizers.</p>
+			
+			<h3 class="mb-4 text-xl font-bold tracking-widest text-white uppercase">Education</h3>
+			<p class="mb-8 flex-1 text-sm leading-relaxed text-zinc-400">
+				Explore the Algorithm Catalog. Learn Big O and logic through interactive visualizers.
+			</p>
 
-			<div class="w-full flex justify-center mb-8">
-				<ul class="inline-block text-left">
-					<li class="text-[0.85rem] text-[#cbd5e1] mb-2 relative pl-5 before:content-['•'] before:text-accent-cyan before:absolute before:left-0 font-medium">Visual Big O Notations</li>
-					<li class="text-[0.85rem] text-[#cbd5e1] mb-2 relative pl-5 before:content-['•'] before:text-accent-cyan before:absolute before:left-0 font-medium">Step-by-step Execution</li>
+			<div class="mb-8 w-full border border-white/5 bg-white/[0.02] rounded-xl p-4">
+				<ul class="flex flex-col gap-2">
+					<li class="flex items-center gap-3 text-sm text-zinc-400">
+						<span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+						Visual Big O Notations
+					</li>
+					<li class="flex items-center gap-3 text-sm text-zinc-400">
+						<span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+						Step-by-step Execution
+					</li>
 				</ul>
 			</div>
 
-			<a href="/education" class="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-border-color rounded-lg text-white font-semibold text-[0.85rem] tracking-[0.05em] transition-all hover:bg-white/10 hover:border-white/20">
+			<a href="/education" class="flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 py-4 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 active:scale-95 mt-auto">
 				ENTER CLASSROOM <ArrowRight size={16} />
 			</a>
-		</div>
+		</GlassWindow>
 
-		<div class="p-10 flex flex-col items-center text-center rounded-2xl transition-all duration-300 border border-accent-cyan/30 bg-linear-to-b from-[rgba(20,45,90,0.5)] to-[rgba(10,20,50,0.7)] shadow-[0_10px_40px_var(--color-accent-cyan-glow)] lg:-translate-y-3">
-			<div class="w-14 h-14 rounded-xl flex justify-center items-center mb-6 bg-emerald-500/10 border border-emerald-500/20">
-				<Trophy size={24} color="#10B981" />
+		<!-- Competition -->
+		<GlassWindow 
+			windowName="arena.exe" 
+			modId="MOD_02" 
+			dotClasses="bg-indigo-500/20 group-hover:bg-indigo-500/50"
+			hoverOffset={true}
+			glowColor="bg-indigo-500/10"
+		>
+			<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+				<Trophy size={24} class="text-indigo-400" />
 			</div>
-			<h3 class="text-xl mb-4 tracking-widest font-bold text-white">COMPETITION</h3>
-			<p class="text-[#cbd5e1] text-[0.9rem] leading-relaxed mb-8 flex-1">Join live sort-wars. Input codes and rank globally against top-tier architects.</p>
+			
+			<h3 class="mb-4 text-xl font-bold tracking-widest text-white uppercase">Competition</h3>
+			<p class="mb-8 flex-1 text-sm leading-relaxed text-zinc-400">
+				Join live sort-wars. Input codes and rank globally against top-tier architects.
+			</p>
 
-			<div class="w-full mb-8">
-				<div class="flex justify-center gap-4 text-[0.7rem] text-[#cbd5e1] mb-3 font-semibold tracking-widest">
-					<span>ACTIVE TOURNAMENT</span>
-					<span>1,048 Players</span>
+			<div class="mb-8 w-full">
+				<div class="mb-3 flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+					<span>Active Tournament</span>
+					<span class="text-indigo-400">1,048 Players</span>
 				</div>
-				<div class="h-1 bg-white/10 rounded-full w-full overflow-hidden">
-					<div class="h-full bg-accent-cyan rounded-full mx-auto" style="width: 50%;"></div>
+				<div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+					<div class="h-full w-1/2 rounded-full bg-indigo-400"></div>
 				</div>
 			</div>
 
-			<a href="/lobby" class="w-full flex items-center justify-center gap-3 p-4 rounded-lg font-bold text-[0.85rem] tracking-[0.05em] transition-all bg-accent-cyan text-black shadow-[0_4px_15px_var(--color-accent-cyan-glow)] hover:bg-white hover:scale-[1.02]">
-				JOIN BATTLE <Play size={16} />
+			<a href="/lobby" class="flex w-full mt-auto items-center justify-center gap-3 rounded-2xl bg-white px-8 py-4 text-sm font-bold uppercase tracking-widest text-black shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all hover:bg-zinc-200 active:scale-95">
+				JOIN BATTLE <Play size={16} fill="currentColor" />
 			</a>
-		</div>
+		</GlassWindow>
 
-		<div class="p-10 flex flex-col items-center text-center rounded-2xl bg-linear-to-b from-[rgba(16,28,65,0.4)] to-[rgba(10,18,45,0.6)] border border-[rgba(45,65,110,0.4)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] hover:border-white/20">
-			<div class="w-14 h-14 rounded-xl flex justify-center items-center mb-6 bg-purple-500/10 border border-purple-500/20">
-				<FlaskConical size={24} color="#A855F7" />
+		<!-- Practice -->
+		<GlassWindow 
+			windowName="lab.sys" 
+			modId="MOD_03" 
+			dotClasses="bg-purple-500/20 group-hover:bg-purple-500/50"
+		>
+			<div class="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20">
+				<FlaskConical size={24} class="text-purple-400" />
 			</div>
-			<h3 class="text-xl mb-4 tracking-widest font-bold text-white">PRACTICE</h3>
-			<p class="text-[#cbd5e1] text-[0.9rem] leading-relaxed mb-8 flex-1">Laboratory workbench. Easy and Hard modes for active experimentation with raw data.</p>
+			
+			<h3 class="mb-4 text-xl font-bold tracking-widest text-white uppercase">Practice</h3>
+			<p class="mb-8 flex-1 text-sm leading-relaxed text-zinc-400">
+				Laboratory workbench. Easy and Hard modes for active experimentation with raw data.
+			</p>
 
-			<div class="flex gap-4 mb-8 w-full justify-center">
-				<div class="flex-1 bg-black/20 border border-border-color rounded-lg p-3 flex flex-col items-center gap-1">
-					<span class="text-[0.6rem] text-[#cbd5e1] tracking-widest font-semibold uppercase">SETS</span>
-					<span class="text-[0.9rem] font-bold text-white">12 Sets</span>
+			<div class="mb-8 flex w-full gap-4">
+				<div class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+					<span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Sets</span>
+					<span class="text-sm font-bold text-white">12 Sets</span>
 				</div>
-				<div class="flex-1 bg-black/20 border border-border-color rounded-lg p-3 flex flex-col items-center gap-1">
-					<span class="text-[0.6rem] text-[#cbd5e1] tracking-widest font-semibold uppercase">DIFF</span>
-					<span class="text-[0.9rem] font-bold text-[#c084fc]">Expert</span>
+				<div class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl border border-white/5 bg-white/[0.02] p-4 text-center">
+					<span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Diff</span>
+					<span class="text-sm font-bold text-purple-400">Expert</span>
 				</div>
 			</div>
 
-			<a href="/practice" class="w-full flex items-center justify-center gap-3 p-4 bg-white/5 border border-border-color rounded-lg text-white font-semibold text-[0.85rem] tracking-[0.05em] transition-all hover:bg-white/10 hover:border-white/20">
+			<a href="/practice" class="flex w-full mt-auto items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 py-4 text-sm font-bold uppercase tracking-widest text-white backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 active:scale-95">
 				OPEN WORKBENCH <ArrowRight size={16} />
 			</a>
-		</div>
+		</GlassWindow>
 	</div>
 </section>

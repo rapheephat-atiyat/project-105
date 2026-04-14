@@ -9,13 +9,7 @@
 	];
 </script>
 
-<section class="relative flex flex-col items-center overflow-hidden bg-[#000000] pt-24 pb-32">
-	
-	<!-- <div class="absolute inset-0 z-0">
-		<div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_85%)]"></div>
-		<div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full"></div>
-		<div class="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] rounded-full"></div>
-	</div> -->
+<section class="relative flex flex-col items-center overflow-hidden pt-24 pb-32">
 
 	<div class="relative z-10 flex w-full max-w-[800px] flex-col items-center px-4 text-center">
 		<div class="mb-8 inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 backdrop-blur-md">

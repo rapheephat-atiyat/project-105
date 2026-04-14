@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Background from '$lib/components/ui/Background.svelte';
 	import { ArrowLeft, RefreshCw, AlertCircle } from 'lucide-svelte';
 </script>
 
@@ -7,11 +8,9 @@
 	<title>{$page.status} — System Error</title>
 </svelte:head>
 
-<div class="relative flex min-h-[calc(100vh-80px)] items-center justify-center overflow-hidden p-6">
-	<div class="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-blue-600/10 blur-[120px]"></div>
-	<div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-indigo-600/10 blur-[120px]"></div>
-
-	<div class="relative flex w-full max-w-lg flex-col items-center">
+<Background />
+<div class="relative flex min-h-screen items-center justify-center overflow-hidden p-6">
+	<div class="relative z-10 flex w-full max-w-lg flex-col items-center">
 		<div class="relative mb-8">
 			<h1 class="text-[10rem] font-black leading-none tracking-tighter text-white opacity-5">
 				{$page.status}
@@ -51,7 +50,7 @@
 			</button>
 		</div>
 
-		<div class="mt-12 flex items-center gap-2 rounded-full border border-white/5 bg-white/[0.02] px-4 py-1.5">
+		<div class="mt-12 flex items-center gap-2 rounded-full border border-white/5 bg-white/2 px-4 py-1.5">
 			<div class="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500"></div>
 			<span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
 				Trace ID: {Math.random().toString(36).substring(7).toUpperCase()}
@@ -59,14 +58,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	:global(body) {
-		background-color: #050505;
-		/* สร้าง Grid พื้นหลังบางๆ */
-		background-image: 
-			linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-			linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-		background-size: 40px 40px;
-	}
-</style>
