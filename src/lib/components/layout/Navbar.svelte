@@ -33,7 +33,7 @@
 	const links = [
 		{ name: 'หน้าหลัก', href: '/', icon: LayoutGrid },
 		{ name: 'บทเรียน', href: '/education', icon: BookOpen },
-		{ name: 'แข่งขัน', href: '/competition', icon: Trophy },
+		{ name: 'แข่งขัน', href: '/lobby', icon: Trophy },
 		{ name: 'ฝึกซ้อม', href: '/practice', icon: Gamepad2 }
 	];
 </script>
