@@ -43,9 +43,9 @@
 		<div class="relative flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/50 shadow-2xl backdrop-blur-2xl">
 			<div class="relative flex items-center border-b border-white/5 bg-white/[0.02] px-8 py-5">
 				<div class="flex flex-1 gap-2.5">
-					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
-					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
-					<span class="h-3 w-3 rounded-full bg-zinc-800"></span>
+					<span class="h-3 w-3 rounded-full bg-red-500"></span>
+					<span class="h-3 w-3 rounded-full bg-yellow-500"></span>
+					<span class="h-3 w-3 rounded-full bg-green-500"></span>
 				</div>
 				<div class="flex flex-1 items-center justify-center gap-2 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
 					<Cpu size={12} /> visualizer.exe
@@ -95,6 +95,10 @@
 		50% { transform: translateY(-15px) rotateX(2deg); }
 	}
 	.sort-bar { animation: sort-bounce 3s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate; }
+	@keyframes sort-bounce {
+		0%, 100% { transform: scaleY(1); filter: brightness(1); }
+		50% { transform: scaleY(0.6); filter: brightness(1.3); }
+	}
 	@keyframes sort-bounce {
 		0%, 100% { transform: scaleY(1); filter: brightness(1); }
 		50% { transform: scaleY(0.6); filter: brightness(1.3); }
