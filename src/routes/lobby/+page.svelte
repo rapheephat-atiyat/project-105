@@ -2,7 +2,7 @@
 	import { Search, Plus, Play, Users, Wifi, Shield, Server, Terminal } from 'lucide-svelte';
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
-    import { io, type Socket } from 'socket.io-client';
+    import { io, type Socket } from 's';
 
     let { data } = $props();
     let rooms = $state(data.initialRooms || []);
