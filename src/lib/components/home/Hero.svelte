@@ -99,8 +99,4 @@
 		0%, 100% { transform: scaleY(1); filter: brightness(1); }
 		50% { transform: scaleY(0.6); filter: brightness(1.3); }
 	}
-	@keyframes sort-bounce {
-		0%, 100% { transform: scaleY(1); filter: brightness(1); }
-		50% { transform: scaleY(0.6); filter: brightness(1.3); }
-	}
 </style>
